@@ -1,7 +1,8 @@
+document.getElementById("form").addEventListener("submit", function (event) {
 
-        document.getElementById("form").addEventListener("submit", function (event) {
+    if (!correcto) {
 
-            event.preventDefault();
+        event.preventDefault();
 
             const user = document.getElementById("user").value.trim();
             const pass = document.getElementById("pass").value;
@@ -52,7 +53,7 @@
 
             // Si todo está bien, enviar formulario
             if (correcto) document.getElementById('form').submit();
-        });
+        }});
 
         // Ocultar error
         function limpiarError(id) {

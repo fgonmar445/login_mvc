@@ -35,7 +35,7 @@ class AuthController
             $_SESSION['login_attempts'] = 0;
         }
 
-        $max_attempts = 5;
+        $max_attempts = 2;
 
         if ($_SESSION['login_attempts'] >= $max_attempts) {
             $_SESSION['error'] = "Has superado el número máximo de intentos. Inténtalo más tarde.";
@@ -105,8 +105,21 @@ class AuthController
 
     public function logout()
     {
+        // Vaciar variables de sesión
+        $_SESSION = [];
+
+        // Destruir sesión
         session_unset();
         session_destroy();
+
+        // Reiniciar sesión limpia
+        session_start();
+        $_SESSION['login_attempts'] = 0;
+
+        // Regenerar token CSRF
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(64));
+
+        // Redirigir al login
         header('Location: index.php?action=login');
         exit();
     }
