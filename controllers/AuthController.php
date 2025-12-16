@@ -1,37 +1,93 @@
 <?php
 // controllers/AuthController.php
 
-class AuthController                                   // la clase AuthController contiene un objeto usuario (el que autentica)
+class AuthController
 {
     private $userModel;
 
-    public function __construct()                     // aquí lo crea
+    public function __construct()
     {
+        // Crear el modelo Usuario
         $this->userModel = new Usuario();
     }
 
-    public function login()                           // aquí ejecuta el login (en realidad, la vista login)
+    public function login()
     {
-        // Carga la vista del formulario de login
+        // Cargar la vista del formulario de login
         include 'views/login.php';
     }
 
-    public function authenticate()                    // aquí confronta con la base de datos
+    public function authenticate()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $username = $_POST['idusuario'];
-            $password = $_POST['password'];
+        /******************************************************
+         * SOLO ACEPTAR PETICIONES POST
+         ******************************************************/
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $_SESSION['error'] = "Debes hacer login para acceder.";
+            header("Location: index.php?action=login");
+            exit();
+        }
 
-            if ($this->userModel->login($username, $password)) {
-                // Autenticación exitosa, iniciar sesión y redirigir al enrutador para que éste envíe al dashboard-inicio
-                $_SESSION['idusuario'] = $username;
-                header('Location: index.php?action=dashboard');
-                exit();
-            } else {
-                // Autenticación fallida, recargar login con error que mostraría mensaje
-                $_GET['error'] = "Usuario o contraseña incorrectos.";
-                include 'views/login.php';
-            }
+        /******************************************************
+         * CONTROL DE INTENTOS FALLIDOS
+         ******************************************************/
+        if (!isset($_SESSION['login_attempts'])) {
+            $_SESSION['login_attempts'] = 0;
+        }
+
+        $max_attempts = 5;
+
+        if ($_SESSION['login_attempts'] >= $max_attempts) {
+            $_SESSION['error'] = "Has superado el número máximo de intentos. Inténtalo más tarde.";
+            header("Location: index.php?action=login");
+            exit();
+        }
+
+        /******************************************************
+         * VALIDACIÓN CSRF
+         ******************************************************/
+        if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
+            die("Solicitud no válida. Token CSRF ausente.");
+        }
+
+        if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            die("Solicitud no válida. Token CSRF incorrecto.");
+        }
+
+        /******************************************************
+         * RECOGER DATOS DEL FORMULARIO
+         ******************************************************/
+        $username = trim($_POST['user'] ?? '');
+        $password = trim($_POST['pass'] ?? '');
+
+        if ($username === '' || $password === '') {
+            $_SESSION['error'] = "Debes rellenar todos los campos.";
+            header("Location: index.php?action=login");
+            exit();
+        }
+
+        /******************************************************
+         * AUTENTICACIÓN USANDO TU MÉTODO login()
+         ******************************************************/
+        if ($this->userModel->login($username, $password)) {
+
+            // Autenticación exitosa
+            $_SESSION['idusuario'] = $username;
+            $_SESSION['usuario_logueado'] = true;
+
+            // Regenerar ID para evitar fijación de sesión
+            session_regenerate_id(true);
+
+            header('Location: index.php?action=dashboard');
+            exit();
+        } else {
+
+            // Autenticación fallida
+            $_SESSION['login_attempts']++;
+            $_SESSION['error'] = "Usuario o contraseña incorrectos.";
+
+            header("Location: index.php?action=login");
+            exit();
         }
     }
 
@@ -39,10 +95,11 @@ class AuthController                                   // la clase AuthControlle
     {
         // Verificar si el usuario ha iniciado sesión
         if (!isset($_SESSION['idusuario'])) {
+            $_SESSION['error'] = "Debes iniciar sesión.";
             header('Location: index.php?action=login');
             exit();
         }
-        // Carga la vista del dashboard (página de bienvenida)
+
         include 'views/dashboard.php';
     }
 

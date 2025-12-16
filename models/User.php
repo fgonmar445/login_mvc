@@ -1,5 +1,5 @@
 <?php
-require_once 'config/Database.php';                      // incluimos el código de conexión a la BD
+require_once __DIR__ . '/../config/Database.php';                      // incluimos el código de conexión a la BD
 
 class Usuario
 {

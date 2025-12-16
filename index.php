@@ -1,14 +1,15 @@
 <?php
 
-require_once 'controllers/AuthController.php';  // el controlador de autentificación y
-require_once 'models/User.php';                 // el modelo de usuarios son cargados al empezar
-																								// ambos son declaraciones de clases -> orientación a objetos pura
-// Iniciar sesión
-session_start();
+// 1. Iniciar sesión y configurar seguridad
+require_once __DIR__ . '/config/establecer-sesion.php';
+
+// 2. Cargar clases del MVC
+require_once 'controllers/AuthController.php';
+require_once 'models/User.php';                                                // ambos son declaraciones de clases -> orientación a objetos pura
 
 $controller = new AuthController();  // se crea una instancia de controlador de usuario (que incluye conexión, tabla, y operatoria con usuarios)
 
-																							 // Simple enrutamiento basado en la URL. Se concentra aquí todo el redireccionamiento
+// Simple enrutamiento basado en la URL. Se concentra aquí todo el redireccionamiento
 if (!isset($_REQUEST['action'])) {             // la primera vez, entramos para hacer login y no hay en la URL action definida
     $controller->login();
 } else {
