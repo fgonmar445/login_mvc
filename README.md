@@ -40,6 +40,7 @@ El objetivo es demostrar cómo construir un login robusto, mantenible y protegid
 - **Modelos**: lógica de datos y consultas SQL  
 - **Controladores**: flujo de autenticación y seguridad  
 - **Vistas**: HTML limpio sin lógica de negocio  
-- **public/** como único punto accesible desde el navegador  
+- El archivo **index.php está en la raíz**, actuando como *Front Controller*  
+- La carpeta `public/` contiene únicamente recursos estáticos (JS, CSS, imágenes)
 
 ---
