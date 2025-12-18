@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 // 1. Iniciar sesión y configurar seguridad
 require_once __DIR__ . '/config/establecer-sesion.php';

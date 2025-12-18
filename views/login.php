@@ -1,8 +1,6 @@
 <?php
-// views/login.php
-
 if (isset($_SESSION['usuario_logueado'])) {
-    header("Location: ./dashboard.php");
+    header("Location: index.php?action=dashboard");
     exit();
 }
 ?>
@@ -16,11 +14,13 @@ if (isset($_SESSION['usuario_logueado'])) {
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/login_mvc/public/styles.css">
+
 </head>
 
-<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+<body class="d-flex align-items-center justify-content-center">
 
-    <div class="card shadow-lg p-4" style="width: 380px;">
+    <div class="login-card">
 
         <h3 class="text-center mb-4">Iniciar Sesión</h3>
 
@@ -47,44 +47,30 @@ if (isset($_SESSION['usuario_logueado'])) {
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
-
         <form action="index.php?action=authenticate" method="POST" id="form">
 
-            <!-- Token CSRF -->
             <input type="hidden" name="csrf_token"
                 value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
-            <!-- Usuario -->
             <div class="mb-3">
                 <label for="user" class="form-label">Usuario</label>
-                <input type="text"
-                    class="form-control"
-                    name="user"
-                    id="user"
-                    placeholder="Introduce tu usuario"
-                    required>
-                <div id="userHelp" class="form-text text-danger" style="display:none;">
+                <input type="text" class="form-control" name="user" id="user"
+                    placeholder="Introduce tu usuario" required>
+                <div id="userHelp" class="form-text text-warning" style="display:none;">
                     El usuario debe tener entre 8 y 15 caracteres.
                 </div>
             </div>
 
-            <!-- Contraseña -->
             <div class="mb-3">
                 <label for="pass" class="form-label">Contraseña</label>
-                <input type="password"
-                    class="form-control"
-                    name="pass"
-                    id="pass"
-                    placeholder="Introduce tu contraseña"
-                    required>
-                <div id="passHelp" class="form-text text-danger" style="display:none;">
+                <input type="password" class="form-control" name="pass" id="pass"
+                    placeholder="Introduce tu contraseña" required>
+                <div id="passHelp" class="form-text text-warning" style="display:none;">
                     La contraseña debe tener entre 8 y 15 caracteres y contener mayúsculas, minúsculas y símbolos.
                 </div>
             </div>
 
-            <!-- Botón -->
-            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-
+            <button type="submit" class="btn btn-login w-100 mt-2 text-white">Entrar</button>
         </form>
     </div>
 
