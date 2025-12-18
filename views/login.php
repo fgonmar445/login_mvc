@@ -60,6 +60,7 @@ if (isset($_SESSION['usuario_logueado'])) {
                 <input type="text"
                     class="form-control"
                     name="user"
+                    id="user"
                     placeholder="Introduce tu usuario"
                     required>
                 <div id="userHelp" class="form-text text-danger" style="display:none;">
@@ -73,6 +74,7 @@ if (isset($_SESSION['usuario_logueado'])) {
                 <input type="password"
                     class="form-control"
                     name="pass"
+                    id="pass"
                     placeholder="Introduce tu contraseña"
                     required>
                 <div id="passHelp" class="form-text text-danger" style="display:none;">
