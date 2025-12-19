@@ -134,6 +134,7 @@ CREATE TABLE users (
 ### ⚙️ Dashboard
 > Vista principal donde se muestra el inicio de la aplicacion.
 <img src="./public/dashboard.jpg" width="700">
+
 ---
 
 ## 🚧 Mejoras futuras
