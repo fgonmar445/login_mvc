@@ -1,16 +1,22 @@
 # 🛡️ Login MVC — Sistema de Autenticación Seguro en PHP
 
-Este proyecto implementa un sistema de autenticación en **PHP** siguiendo el patrón **MVC (Modelo‑Vista‑Controlador)**, incorporando múltiples medidas de seguridad tanto en el cliente como en el servidor.  
-El objetivo es demostrar cómo construir un login robusto, mantenible y protegido frente a ataques comunes como SQL Injection, XSS, session hijacking o fuerza bruta.
+Sistema de autenticación desarrollado en **PHP** siguiendo el patrón **MVC (Modelo‑Vista‑Controlador)**.  
+Incluye múltiples medidas de seguridad tanto en el cliente como en el servidor, con el objetivo de demostrar cómo construir un login **robusto, mantenible y protegido** frente a ataques comunes como:
+
+- SQL Injection  
+- XSS  
+- Session Hijacking  
+- Fuerza bruta  
+- Fijación de sesión  
 
 ---
 
 ## ✨ Características principales
 
 ### 🔐 Autenticación segura
-- Contraseñas almacenadas con `password_hash()`
-- Verificación con `password_verify()`
-- Consultas SQL preparadas (PDO)
+- Contraseñas cifradas con `password_hash()`
+- Verificación mediante `password_verify()`
+- Consultas SQL preparadas con PDO
 - Sanitización de entradas del usuario
 - Escapado de salida para evitar XSS
 
@@ -37,10 +43,111 @@ El objetivo es demostrar cómo construir un login robusto, mantenible y protegid
 - Escapado de salida con `htmlspecialchars()`
 
 ### 🧩 Arquitectura MVC
-- **Modelos**: lógica de datos y consultas SQL  
-- **Controladores**: flujo de autenticación y seguridad  
-- **Vistas**: HTML limpio sin lógica de negocio  
-- El archivo **index.php está en la raíz**, actuando como *Front Controller*  
-- La carpeta `public/` contiene únicamente recursos estáticos (JS, CSS, imágenes)
+- **Modelos** → lógica de datos y consultas SQL  
+- **Controladores** → flujo de autenticación y seguridad  
+- **Vistas** → HTML limpio sin lógica de negocio  
+- `index.php` en la raíz como *Front Controller*  
+- Carpeta `public/` para recursos estáticos (CSS, JS, imágenes)
 
 ---
+
+## 📁 Estructura del Proyecto
+
+```txt
+/Login_MVC/
+│
+├── config/
+│   ├── Database.php
+│   └── establecer-sesion.php
+│
+├── controllers/
+│   └── AuthController.php
+│
+├── models/
+│   └── User.php
+│
+├── views/
+│   ├── dashboard.php
+│   └── login.php 
+│
+├── public/
+│   ├── styles.css
+│   └── verificaciones.js
+│
+├── index.php
+└── README.md
+```
+
+---
+
+## 🔧 Instalación
+
+1. **Clona el repositorio**
+   ```bash
+   git clone https://github.com/fgonmar445/login_mvc
+   ```
+
+2. **Importa la base de datos**
+   - Abre phpMyAdmin
+   - Crea una base de datos llamada `login_php`
+   - Importa el archivo `login-php.sql` incluido en el proyecto
+
+3. **Configura la conexión en `config/Database.php`**
+   ```php
+   $this->conn = new PDO("mysql:host=localhost;dbname=login_mvc", "root", "");
+   ```
+
+4. **Inicia el servidor local**
+   ```bash
+   php -S localhost:8000
+   ```
+
+5. **Accede desde el navegador**
+   ```
+   http://localhost:8000
+   ```
+
+---
+
+## 🗄️ Esquema de la Base de Datos
+
+```sql
+CREATE TABLE users (
+  (
+    `codUser` int(10) NOT NULL,
+  `idUser` varchar(15) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nombre` varchar(15) NOT NULL,
+  `apellidos` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
+```
+
+---
+
+## 📸 Interfaz de Usuario
+
+### ✨ Login
+> Login de acceso al sistemas
+<img src="./public/login.jpg" width="700">
+
+### ⚙️ Dashboard
+> Vista principal donde se muestra el inicio de la aplicacion.
+<img src="./public/dashboard.jpg" width="700">
+---
+
+## 🚧 Mejoras futuras
+
+- Recuperación de contraseña por email  
+- Doble factor de autenticación (2FA)  
+- Roles y permisos (admin/usuario)  
+- Logs de actividad  
+- API REST para autenticación externa  
+
+---
+
+## 👤 Autor
+
+Proyecto desarrollado por **Felipe González**  
+📧 Contacto: felipemarbouh@gmail.com
+
